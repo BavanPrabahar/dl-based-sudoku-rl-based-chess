@@ -6,6 +6,9 @@ Metrics, overall and per puzzle source:
   cell_acc            fraction of BLANK cells the network fills correctly in one forward pass
   board_acc_one_shot  whole board correct after one forward pass (all blanks at once)
   board_acc_iterative whole board correct with iterative decoding (one most-confident legal cell at a time)
+  board_acc_checked   one-shot board if it passes the rule check, otherwise the iterative board. The check
+                      uses only the Sudoku rules and the clues (no solution); every test puzzle has a unique
+                      solution, so a board that passes is the correct one
 A board counts as solved if it is complete, obeys every Sudoku rule and keeps all clues.
 The exact backtracking solver is timed on a sample for reference (always correct when it finishes; a per-puzzle
 time limit stops it on the hardest puzzles).
@@ -93,14 +96,16 @@ def main():
         cell_acc, one, it = score(model, P, S, groups)
         res = {"checkpoint": "no network (uniform scores)" if path == "uniform" else os.path.basename(path), "params": meta.get("params"), "train_step": meta.get("step"),
                "cell_acc": round(cell_acc, 4), "board_acc_one_shot": round(float(one.mean()), 4),
-               "board_acc_iterative": round(float(it.mean()), 4), "eval_seconds": round(time.time() - t0, 1),
+               "board_acc_iterative": round(float(it.mean()), 4),
+               "board_acc_checked": round(float((one | it).mean()), 4), "eval_seconds": round(time.time() - t0, 1),
                "by_source": {}}
         for i, n in enumerate(names):
             m = src == i
             if not m.any():
                 continue
             res["by_source"][n] = {"n": int(m.sum()), "board_acc_one_shot": round(float(one[m].mean()), 4),
-                                   "board_acc_iterative": round(float(it[m].mean()), 4)}
+                                   "board_acc_iterative": round(float(it[m].mean()), 4),
+                                   "board_acc_checked": round(float((one[m] | it[m]).mean()), 4)}
         print(json.dumps(res), flush=True)
         out["models"].append(res)
 

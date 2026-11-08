@@ -4,12 +4,18 @@ Train a Sudoku network on Sudoku-Extreme (or any .npz written by sudoku.dataset.
 
 * data live on the GPU as uint8 and every batch gets random Sudoku symmetries (augment),
 * the loss is cross-entropy on the BLANK cells only (copying the clues is not something to learn),
+* --reveal-frac F: on a fraction F of every batch, a random share of the blanks is filled with the true
+  digits before the forward pass. Iterative decoding feeds the network its own partially solved boards; a
+  network trained only on original puzzles has never seen "many digits filled, still hard" boards and
+  makes confident mistakes on them (see README, Results),
 * a fixed validation slice of the training file (never trained on) is scored every --eval-every steps
   with blank-cell accuracy and full-board accuracy (one-shot and iterative); the best checkpoint
   (iterative board accuracy) is kept.
 
 Example:
   python -m sudoku.train --data data/processed/sudoku_extreme_train.npz --steps 60000 --save checkpoints/sudoku_constraint.pt
+  python -m sudoku.train --init checkpoints/sudoku_constraint.pt --reveal-frac 0.5 --steps 10000 --lr 5e-4 \
+         --save checkpoints/sudoku_constraint_ft.pt          # fine-tune on partially solved boards
 """
 
 import argparse
@@ -62,6 +68,9 @@ def main():
     ap.add_argument("--val-size", type=int, default=10000)
     ap.add_argument("--eval-every", type=int, default=5000)
     ap.add_argument("--no-augment", action="store_true")
+    ap.add_argument("--reveal-frac", type=float, default=0.0,
+                    help="fraction of each batch with a random share of the blanks revealed (0 = off)")
+    ap.add_argument("--init", default=None, help="start from this checkpoint (same architecture)")
     ap.add_argument("--save", default="checkpoints/sudoku_constraint.pt")
     ap.add_argument("--log", default=None, help="JSON-lines training log (default: <save>.log.jsonl)")
     ap.add_argument("--seed", type=int, default=0)
@@ -82,6 +91,12 @@ def main():
     arch_kwargs = ({"num_blocks": args.blocks, "hidden_dim": args.hidden} if args.arch == "constraint"
                    else {"num_layers": args.layers, "hidden_dim": args.hidden})
     model = build_model(args.arch, **arch_kwargs).to(device)
+    if args.init:
+        ck = torch.load(args.init, map_location="cpu", weights_only=True)
+        if ck["arch"] != args.arch or ck["arch_kwargs"] != arch_kwargs:
+            raise SystemExit(f"--init {args.init} is {ck['arch']} {ck['arch_kwargs']}, not {args.arch} {arch_kwargs}")
+        model.load_state_dict(ck["state_dict"])
+        print(f"initialised from {args.init} (step {ck['meta'].get('step')})")
     n_params = sum(p.numel() for p in model.parameters())
     opt = torch.optim.AdamW(model.parameters(), lr=args.lr, weight_decay=args.weight_decay)
     warmup = min(1000, args.steps // 20)
@@ -99,6 +114,12 @@ def main():
         p, s = P[idx], S[idx]
         if not args.no_augment:
             p, s = augment(p, s)
+        if args.reveal_frac > 0:
+            # reveal a uniformly random share of the blanks (true digits) on part of the batch
+            rows = torch.rand(len(p), 1, device=device) < args.reveal_frac
+            share = torch.rand(len(p), 1, device=device)
+            reveal = rows & (p == 0) & (torch.rand(p.shape, device=device) < share)
+            p = torch.where(reveal, s, p)
         with torch.autocast("cuda", dtype=torch.bfloat16, enabled=device.type == "cuda"):
             logits = model(one_hot_batch(p))
         logits = logits.float().view(-1, 9, 81)
@@ -123,7 +144,7 @@ def main():
                 best = m["board_acc_iterative"]
                 torch.save({"arch": args.arch, "arch_kwargs": arch_kwargs, "state_dict": model.state_dict(),
                             "meta": {"step": step, "val": m, "data": os.path.basename(args.data),
-                                     "params": n_params, "args": vars(args)}}, args.save)
+                                     "params": n_params, "args": vars(args), "init": args.init}}, args.save)
     print(f"best validation board accuracy (iterative): {best:.4f} -> {args.save}")
 
 
