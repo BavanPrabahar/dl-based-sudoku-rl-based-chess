@@ -12,6 +12,10 @@ Every iteration:
                + c_kl * KL(pi || pi_warmstart)    keeps the policy close to sensible chess
                - c_ent * H(pi)                    exploration
 No expert move labels are used in this stage: the only learning signal is the reward.
+The value head is trained on detached trunk features, so the baseline regression never changes the policy;
+only the policy-gradient, KL and entropy terms do. (Without the detach, the randomly initialised value head's
+BCE gradient flowed into the shared trunk and cut the validation solve rate from 0.762 to 0.675 within
+the 100 value-warm-up iterations.)
 
 Example:
   python -m chess_rl.train_rl --init checkpoints/chess_supervised.pt --iters 1500 --save checkpoints/chess_rl.pt
@@ -53,7 +57,8 @@ def main():
     ap.add_argument("--c-kl", type=float, default=0.1)
     ap.add_argument("--c-ent", type=float, default=0.001)
     ap.add_argument("--value-warmup", type=int, default=100,
-                    help="first iterations train only the value baseline (policy frozen) so advantages are calibrated")
+                    help="first iterations train only the value head (policy unchanged) so advantages are calibrated")
+    ap.add_argument("--chunk", type=int, default=1024, help="positions per forward/backward chunk (memory bound)")
     ap.add_argument("--eval-every", type=int, default=100)
     ap.add_argument("--val-size", type=int, default=10000)
     ap.add_argument("--save", default="checkpoints/chess_rl.pt")
@@ -85,27 +90,34 @@ def main():
         reward = torch.tensor([float(e.solved) for e in eps], device=dev)
         R = reward[traj["episode"]]
 
-        with torch.autocast("cuda", dtype=torch.bfloat16, enabled=dev.type == "cuda"):
-            planes = planes_from_encoded(traj["enc"])
-            logits, v = model(planes)
-            with torch.no_grad():
-                ref_logits, _ = ref(planes)
-        mask = traj["mask"]
-        logp = F.log_softmax(logits.float().masked_fill(~mask, -1e9), dim=1)
-        ref_logp = F.log_softmax(ref_logits.float().masked_fill(~mask, -1e9), dim=1)
-        p = logp.exp()
-        act_logp = logp.gather(1, traj["action"][:, None]).squeeze(1)
-        adv = R - torch.sigmoid(v.float()).detach()
-        loss_pi = -(adv * act_logp).mean()
-        loss_v = F.binary_cross_entropy_with_logits(v.float(), R)
-        kl = (p * (logp - ref_logp)).masked_fill(~mask, 0).sum(1).mean()
-        ent = -(p * logp).masked_fill(~mask, 0).sum(1).mean()
-        if it <= args.value_warmup:
-            loss = loss_v                     # calibrate the baseline first; the policy is not changed yet
-        else:
-            loss = loss_pi + args.c_value * loss_v + args.c_kl * kl - args.c_ent * ent
+        # one gradient step over all recorded positions, accumulated in chunks to bound GPU memory
+        # (every chunk adds sum/N, so the gradient equals the full-batch mean)
+        n = len(R)
         opt.zero_grad(set_to_none=True)
-        loss.backward()
+        stats = {"loss_v": 0.0, "kl": 0.0, "ent": 0.0}
+        for s in range(0, n, args.chunk):
+            sl = slice(s, s + args.chunk)
+            with torch.autocast("cuda", dtype=torch.bfloat16, enabled=dev.type == "cuda"):
+                planes = planes_from_encoded(traj["enc"][sl])
+                logits, v = model(planes, detach_value=True)
+                with torch.no_grad():
+                    ref_logits, _ = ref(planes)
+            mask, r = traj["mask"][sl], R[sl]
+            logp = F.log_softmax(logits.float().masked_fill(~mask, -1e9), dim=1)
+            ref_logp = F.log_softmax(ref_logits.float().masked_fill(~mask, -1e9), dim=1)
+            p = logp.exp()
+            act_logp = logp.gather(1, traj["action"][sl, None]).squeeze(1)
+            adv = r - torch.sigmoid(v.float()).detach()
+            loss_pi = -(adv * act_logp).sum() / n
+            loss_v = F.binary_cross_entropy_with_logits(v.float(), r, reduction="sum") / n
+            kl = (p * (logp - ref_logp)).masked_fill(~mask, 0).sum() / n
+            ent = -(p * logp).masked_fill(~mask, 0).sum() / n
+            if it <= args.value_warmup:
+                loss = loss_v                 # calibrate the baseline first; the policy is not changed yet
+            else:
+                loss = loss_pi + args.c_value * loss_v + args.c_kl * kl - args.c_ent * ent
+            loss.backward()
+            stats["loss_v"] += loss_v.item(); stats["kl"] += kl.item(); stats["ent"] += ent.item()
         torch.nn.utils.clip_grad_norm_(model.parameters(), 1.0)
         opt.step()
         rew_hist.append(reward.mean().item())
@@ -114,8 +126,8 @@ def main():
             rate = solve_rate(model, val, dev)
             rec = {"iter": it, "phase": "value-warmup" if it <= args.value_warmup else "policy-gradient",
                    "train_reward": round(float(np.mean(rew_hist[-args.eval_every:])), 4),
-                   "value_loss": round(loss_v.item(), 4),
-                   "val_solve_rate": round(rate, 4), "kl": round(kl.item(), 4), "entropy": round(ent.item(), 3),
+                   "value_loss": round(stats["loss_v"], 4),
+                   "val_solve_rate": round(rate, 4), "kl": round(stats["kl"], 4), "entropy": round(stats["ent"], 3),
                    "minutes": round((time.time() - t0) / 60, 1)}
             print(json.dumps(rec), flush=True)
             log.write(json.dumps(rec) + "\n"); log.flush()

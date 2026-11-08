@@ -39,9 +39,11 @@ class ChessNet(nn.Module):
         self.value = nn.Sequential(nn.Conv2d(channels, 4, 1, bias=False), nn.BatchNorm2d(4), nn.ReLU(),
                                    nn.Flatten(), nn.Linear(4 * 64, 128), nn.ReLU(), nn.Linear(128, 1))
 
-    def forward(self, x):
+    def forward(self, x, detach_value: bool = False):
+        """detach_value=True: the value head reads the trunk features without sending gradients into them,
+        so training the baseline cannot change the policy (used during RL)."""
         h = self.body(self.stem(x))
-        return self.policy(h), self.value(h).squeeze(1)
+        return self.policy(h), self.value(h.detach() if detach_value else h).squeeze(1)
 
 
 def save_checkpoint(path, model, meta, half=True):
