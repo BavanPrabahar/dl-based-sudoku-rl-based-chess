@@ -1,0 +1,145 @@
+{
+  "test_puzzles": 61833,
+  "puzzles": [
+    {
+      "model": "random legal moves",
+      "puzzles": 61833,
+      "first_move_acc": 0.05374152960393318,
+      "solve_rate": 0.008005433991557906,
+      "estimated_puzzle_rating": 400,
+      "by_rating": {
+        "0-1000": {
+          "n": 14193,
+          "first_move_acc": 0.04960191643768055,
+          "solve_rate": 0.016275628831113928
+        },
+        "1000-1500": {
+          "n": 19901,
+          "first_move_acc": 0.050650721069293,
+          "solve_rate": 0.007989548263906337
+        },
+        "1500-2000": {
+          "n": 15948,
+          "first_move_acc": 0.053737145723601706,
+          "solve_rate": 0.004201153749686481
+        },
+        "2000-2500": {
+          "n": 9484,
+          "first_move_acc": 0.06263180092787853,
+          "solve_rate": 0.0032686630113876003
+        },
+        "2500-4000": {
+          "n": 2307,
+          "first_move_acc": 0.06935413957520589,
+          "solve_rate": 0.003034243606415258
+        }
+      }
+    },
+    {
+      "model": "chess_supervised.pt (supervised)",
+      "puzzles": 61833,
+      "first_move_acc": 0.8552067666132971,
+      "solve_rate": 0.7574110911649119,
+      "estimated_puzzle_rating": 1925,
+      "by_rating": {
+        "0-1000": {
+          "n": 14193,
+          "first_move_acc": 0.9922497005566124,
+          "solve_rate": 0.9897836961882618
+        },
+        "1000-1500": {
+          "n": 19901,
+          "first_move_acc": 0.9503040048238782,
+          "solve_rate": 0.9269885935380132
+        },
+        "1500-2000": {
+          "n": 15948,
+          "first_move_acc": 0.8043014798093805,
+          "solve_rate": 0.6928141459744168
+        },
+        "2000-2500": {
+          "n": 9484,
+          "first_move_acc": 0.6134542387178405,
+          "solve_rate": 0.3239139603542809
+        },
+        "2500-4000": {
+          "n": 2307,
+          "first_move_acc": 0.5374945817078457,
+          "solve_rate": 0.09362808842652796
+        }
+      }
+    },
+    {
+      "model": "chess_rl.pt (rl)",
+      "puzzles": 61833,
+      "first_move_acc": 0.8597189203176298,
+      "solve_rate": 0.7617938641178659,
+      "estimated_puzzle_rating": 1935,
+      "by_rating": {
+        "0-1000": {
+          "n": 14193,
+          "first_move_acc": 0.994715704924963,
+          "solve_rate": 0.992108786021278
+        },
+        "1000-1500": {
+          "n": 19901,
+          "first_move_acc": 0.9599015124868097,
+          "solve_rate": 0.9398522687302145
+        },
+        "1500-2000": {
+          "n": 15948,
+          "first_move_acc": 0.8099448206671683,
+          "solve_rate": 0.6979558565337346
+        },
+        "2000-2500": {
+          "n": 9484,
+          "first_move_acc": 0.6111345423871785,
+          "solve_rate": 0.31600590468156897
+        },
+        "2500-4000": {
+          "n": 2307,
+          "first_move_acc": 0.5309926311226701,
+          "solve_rate": 0.08279150411790204
+        }
+      }
+    }
+  ],
+  "games": [
+    {
+      "opponent": "random mover",
+      "games": 100,
+      "wins": 87,
+      "draws": 13,
+      "losses": 0,
+      "score": 0.935,
+      "model": "chess_supervised.pt (supervised)"
+    },
+    {
+      "opponent": "Stockfish Skill Level 0, 10 ms/move",
+      "games": 100,
+      "wins": 13,
+      "draws": 15,
+      "losses": 72,
+      "score": 0.205,
+      "model": "chess_supervised.pt (supervised)"
+    },
+    {
+      "opponent": "random mover",
+      "games": 100,
+      "wins": 89,
+      "draws": 11,
+      "losses": 0,
+      "score": 0.945,
+      "model": "chess_rl.pt (rl)"
+    },
+    {
+      "opponent": "Stockfish Skill Level 0, 10 ms/move",
+      "games": 100,
+      "wins": 23,
+      "draws": 18,
+      "losses": 59,
+      "score": 0.32,
+      "model": "chess_rl.pt (rl)"
+    }
+  ]
+}

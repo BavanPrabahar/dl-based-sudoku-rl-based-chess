@@ -1,11 +1,12 @@
 """
 demo_activation_solve.py
-Demonstrates how activations/logits eliminate wrong numbers and select the winner
-for an empty cell in front of your eyes.
+Teaching illustration (no neural network involved): hand-written rule scores play the role of
+"logits" to show how conflicting digits get suppressed and the winner is picked with argmax.
+For the trained network's decisions see sudoku/solve.py.
 """
 
 import numpy as np
-from board_utils import is_valid_move, print_board
+from sudoku.board_utils import is_valid_move, print_board
 
 # Sample Sudoku puzzle
 board = np.array([

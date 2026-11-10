@@ -7,7 +7,7 @@ Acts as our ground-truth benchmark and data generator.
 import time
 from typing import Optional, Tuple
 import numpy as np
-from board_utils import is_valid_move, print_board
+from sudoku.board_utils import is_valid_move, print_board
 
 
 def find_empty_cell(board: np.ndarray) -> Optional[Tuple[int, int]]:
