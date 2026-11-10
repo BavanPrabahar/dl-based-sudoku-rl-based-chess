@@ -1,0 +1,16 @@
+{"iter": 0, "val_solve_rate": 0.7619}
+{"iter": 100, "phase": "value-warmup", "train_reward": 0.7008, "value_loss": 0.5366, "val_solve_rate": 0.7619, "kl": 0.0, "entropy": 0.291, "minutes": 1.7}
+{"iter": 200, "phase": "policy-gradient", "train_reward": 0.7285, "value_loss": 0.4834, "val_solve_rate": 0.7666, "kl": 0.031, "entropy": 0.156, "minutes": 4.2}
+{"iter": 300, "phase": "policy-gradient", "train_reward": 0.7371, "value_loss": 0.4761, "val_solve_rate": 0.767, "kl": 0.0405, "entropy": 0.149, "minutes": 6.7}
+{"iter": 400, "phase": "policy-gradient", "train_reward": 0.7405, "value_loss": 0.491, "val_solve_rate": 0.7669, "kl": 0.0486, "entropy": 0.141, "minutes": 9.1}
+{"iter": 500, "phase": "policy-gradient", "train_reward": 0.7429, "value_loss": 0.454, "val_solve_rate": 0.7676, "kl": 0.05, "entropy": 0.13, "minutes": 11.6}
+{"iter": 600, "phase": "policy-gradient", "train_reward": 0.7411, "value_loss": 0.4499, "val_solve_rate": 0.768, "kl": 0.0508, "entropy": 0.134, "minutes": 14.0}
+{"iter": 700, "phase": "policy-gradient", "train_reward": 0.7458, "value_loss": 0.4698, "val_solve_rate": 0.7703, "kl": 0.0472, "entropy": 0.128, "minutes": 16.5}
+{"iter": 800, "phase": "policy-gradient", "train_reward": 0.7457, "value_loss": 0.4751, "val_solve_rate": 0.769, "kl": 0.0545, "entropy": 0.136, "minutes": 19.0}
+{"iter": 900, "phase": "policy-gradient", "train_reward": 0.7466, "value_loss": 0.4664, "val_solve_rate": 0.769, "kl": 0.0561, "entropy": 0.134, "minutes": 21.4}
+{"iter": 1000, "phase": "policy-gradient", "train_reward": 0.7465, "value_loss": 0.45, "val_solve_rate": 0.7707, "kl": 0.0547, "entropy": 0.137, "minutes": 23.9}
+{"iter": 1100, "phase": "policy-gradient", "train_reward": 0.7492, "value_loss": 0.4584, "val_solve_rate": 0.7705, "kl": 0.058, "entropy": 0.137, "minutes": 26.4}
+{"iter": 1200, "phase": "policy-gradient", "train_reward": 0.7501, "value_loss": 0.4311, "val_solve_rate": 0.7698, "kl": 0.0565, "entropy": 0.13, "minutes": 28.8}
+{"iter": 1300, "phase": "policy-gradient", "train_reward": 0.7485, "value_loss": 0.4398, "val_solve_rate": 0.7707, "kl": 0.0585, "entropy": 0.134, "minutes": 31.3}
+{"iter": 1400, "phase": "policy-gradient", "train_reward": 0.749, "value_loss": 0.4348, "val_solve_rate": 0.7694, "kl": 0.0591, "entropy": 0.127, "minutes": 33.8}
+{"iter": 1500, "phase": "policy-gradient", "train_reward": 0.75, "value_loss": 0.4386, "val_solve_rate": 0.7708, "kl": 0.0562, "entropy": 0.116, "minutes": 36.4}

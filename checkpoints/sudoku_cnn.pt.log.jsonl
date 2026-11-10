@@ -1,0 +1,10 @@
+{"step": 4000, "loss": 1.1984, "lr": 0.0019510565162951536, "minutes": 0.7, "cell_acc": 0.4427, "board_acc_one_shot": 0.0, "board_acc_iterative": 0.0456}
+{"step": 8000, "loss": 1.1834, "lr": 0.0018090169943749475, "minutes": 1.4, "cell_acc": 0.4493, "board_acc_one_shot": 0.0, "board_acc_iterative": 0.0541}
+{"step": 12000, "loss": 1.1756, "lr": 0.0015877852522924731, "minutes": 2.1, "cell_acc": 0.4527, "board_acc_one_shot": 0.0, "board_acc_iterative": 0.0627}
+{"step": 16000, "loss": 1.1714, "lr": 0.0013090169943749475, "minutes": 2.8, "cell_acc": 0.455, "board_acc_one_shot": 0.0, "board_acc_iterative": 0.0713}
+{"step": 20000, "loss": 1.1686, "lr": 0.001, "minutes": 3.5, "cell_acc": 0.4565, "board_acc_one_shot": 0.0, "board_acc_iterative": 0.0764}
+{"step": 24000, "loss": 1.1664, "lr": 0.0006909830056250527, "minutes": 4.2, "cell_acc": 0.4583, "board_acc_one_shot": 0.0, "board_acc_iterative": 0.0759}
+{"step": 28000, "loss": 1.1645, "lr": 0.00041221474770752696, "minutes": 4.9, "cell_acc": 0.4593, "board_acc_one_shot": 0.0, "board_acc_iterative": 0.0801}
+{"step": 32000, "loss": 1.1624, "lr": 0.00019098300562505265, "minutes": 5.6, "cell_acc": 0.4598, "board_acc_one_shot": 0.0, "board_acc_iterative": 0.0815}
+{"step": 36000, "loss": 1.1629, "lr": 4.894348370484647e-05, "minutes": 6.3, "cell_acc": 0.4603, "board_acc_one_shot": 0.0, "board_acc_iterative": 0.0819}
+{"step": 40000, "loss": 1.1609, "lr": 0.0, "minutes": 7.0, "cell_acc": 0.4606, "board_acc_one_shot": 0.0, "board_acc_iterative": 0.082}

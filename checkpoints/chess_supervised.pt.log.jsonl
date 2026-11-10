@@ -1,0 +1,10 @@
+{"step": 3000, "loss": 0.8096, "val_move_acc_unmasked": 0.7514, "minutes": 19.6}
+{"step": 6000, "loss": 0.6233, "val_move_acc_unmasked": 0.8003, "minutes": 34.6}
+{"step": 9000, "loss": 0.5191, "val_move_acc_unmasked": 0.8226, "minutes": 47.9}
+{"step": 12000, "loss": 0.455, "val_move_acc_unmasked": 0.836, "minutes": 61.2}
+{"step": 15000, "loss": 0.4147, "val_move_acc_unmasked": 0.8455, "minutes": 74.5}
+{"step": 18000, "loss": 0.3728, "val_move_acc_unmasked": 0.8533, "minutes": 87.8}
+{"step": 21000, "loss": 0.3286, "val_move_acc_unmasked": 0.8589, "minutes": 101.1}
+{"step": 24000, "loss": 0.3101, "val_move_acc_unmasked": 0.8635, "minutes": 114.4}
+{"step": 27000, "loss": 0.2926, "val_move_acc_unmasked": 0.8651, "minutes": 127.8}
+{"step": 30000, "loss": 0.2912, "val_move_acc_unmasked": 0.8654, "minutes": 141.1}
