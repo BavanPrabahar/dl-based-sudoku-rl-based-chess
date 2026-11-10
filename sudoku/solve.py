@@ -24,7 +24,7 @@ from sudoku.model import load_checkpoint
 def main():
     ap = argparse.ArgumentParser(description="Solve a Sudoku with backtracking and with the trained network")
     ap.add_argument("--puzzle", default="530070000600195000098000060800060003400803001700020006060000280000419005000080079")
-    ap.add_argument("--checkpoint", default="checkpoints/sudoku_constraint.pt")
+    ap.add_argument("--checkpoint", default="checkpoints/sudoku_constraint_ft.pt")
     args = ap.parse_args()
     puzzle = args.puzzle.strip().replace(".", "0")
     if len(puzzle) != 81 or not puzzle.isdigit():

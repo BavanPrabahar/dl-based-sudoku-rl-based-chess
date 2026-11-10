@@ -1,0 +1,313 @@
+{
+  "test_puzzles": 422786,
+  "sources": {
+    "puzzles1_unbiased": 99749,
+    "puzzles4_forum_hardest_1905": 209601,
+    "puzzles0_kaggle": 9954,
+    "puzzles2_17_clue": 4855,
+    "01_file1": 93552,
+    "puzzles5_forum_hardest_1905_11+": 4887,
+    "puzzles3_magictour_top1465": 143,
+    "puzzles6_forum_hardest_1106": 45
+  },
+  "models": [
+    {
+      "checkpoint": "no network (uniform scores)",
+      "params": 0,
+      "train_step": null,
+      "cell_acc": 0.1111,
+      "board_acc_one_shot": 0.0,
+      "board_acc_iterative": 0.0437,
+      "board_acc_checked": 0.0437,
+      "eval_seconds": 5.9,
+      "by_source": {
+        "puzzles1_unbiased": {
+          "n": 99749,
+          "board_acc_one_shot": 0.0,
+          "board_acc_iterative": 0.0746,
+          "board_acc_checked": 0.0746
+        },
+        "puzzles4_forum_hardest_1905": {
+          "n": 209601,
+          "board_acc_one_shot": 0.0,
+          "board_acc_iterative": 0.0018,
+          "board_acc_checked": 0.0018
+        },
+        "puzzles0_kaggle": {
+          "n": 9954,
+          "board_acc_one_shot": 0.0,
+          "board_acc_iterative": 0.9999,
+          "board_acc_checked": 0.9999
+        },
+        "puzzles2_17_clue": {
+          "n": 4855,
+          "board_acc_one_shot": 0.0,
+          "board_acc_iterative": 0.0016,
+          "board_acc_checked": 0.0016
+        },
+        "01_file1": {
+          "n": 93552,
+          "board_acc_one_shot": 0.0,
+          "board_acc_iterative": 0.0073,
+          "board_acc_checked": 0.0073
+        },
+        "puzzles5_forum_hardest_1905_11+": {
+          "n": 4887,
+          "board_acc_one_shot": 0.0,
+          "board_acc_iterative": 0.0012,
+          "board_acc_checked": 0.0012
+        },
+        "puzzles3_magictour_top1465": {
+          "n": 143,
+          "board_acc_one_shot": 0.0,
+          "board_acc_iterative": 0.0,
+          "board_acc_checked": 0.0
+        },
+        "puzzles6_forum_hardest_1106": {
+          "n": 45,
+          "board_acc_one_shot": 0.0,
+          "board_acc_iterative": 0.0,
+          "board_acc_checked": 0.0
+        }
+      }
+    },
+    {
+      "checkpoint": "sudoku_cnn.pt",
+      "params": 265353,
+      "train_step": 40000,
+      "cell_acc": 0.4604,
+      "board_acc_one_shot": 0.0,
+      "board_acc_iterative": 0.0852,
+      "board_acc_checked": 0.0852,
+      "eval_seconds": 249.3,
+      "by_source": {
+        "puzzles1_unbiased": {
+          "n": 99749,
+          "board_acc_one_shot": 0.0,
+          "board_acc_iterative": 0.2505,
+          "board_acc_checked": 0.2505
+        },
+        "puzzles4_forum_hardest_1905": {
+          "n": 209601,
+          "board_acc_one_shot": 0.0,
+          "board_acc_iterative": 0.004,
+          "board_acc_checked": 0.004
+        },
+        "puzzles0_kaggle": {
+          "n": 9954,
+          "board_acc_one_shot": 0.0,
+          "board_acc_iterative": 0.9894,
+          "board_acc_checked": 0.9894
+        },
+        "puzzles2_17_clue": {
+          "n": 4855,
+          "board_acc_one_shot": 0.0,
+          "board_acc_iterative": 0.0299,
+          "board_acc_checked": 0.0299
+        },
+        "01_file1": {
+          "n": 93552,
+          "board_acc_one_shot": 0.0,
+          "board_acc_iterative": 0.0021,
+          "board_acc_checked": 0.0021
+        },
+        "puzzles5_forum_hardest_1905_11+": {
+          "n": 4887,
+          "board_acc_one_shot": 0.0,
+          "board_acc_iterative": 0.0037,
+          "board_acc_checked": 0.0037
+        },
+        "puzzles3_magictour_top1465": {
+          "n": 143,
+          "board_acc_one_shot": 0.0,
+          "board_acc_iterative": 0.021,
+          "board_acc_checked": 0.021
+        },
+        "puzzles6_forum_hardest_1106": {
+          "n": 45,
+          "board_acc_one_shot": 0.0,
+          "board_acc_iterative": 0.0,
+          "board_acc_checked": 0.0
+        }
+      }
+    },
+    {
+      "checkpoint": "sudoku_constraint.pt",
+      "params": 3418633,
+      "train_step": 28000,
+      "cell_acc": 0.7373,
+      "board_acc_one_shot": 0.2232,
+      "board_acc_iterative": 0.4076,
+      "board_acc_checked": 0.4816,
+      "eval_seconds": 2980.4,
+      "by_source": {
+        "puzzles1_unbiased": {
+          "n": 99749,
+          "board_acc_one_shot": 0.3244,
+          "board_acc_iterative": 0.8857,
+          "board_acc_checked": 0.8871
+        },
+        "puzzles4_forum_hardest_1905": {
+          "n": 209601,
+          "board_acc_one_shot": 0.0036,
+          "board_acc_iterative": 0.1818,
+          "board_acc_checked": 0.1842
+        },
+        "puzzles0_kaggle": {
+          "n": 9954,
+          "board_acc_one_shot": 1.0,
+          "board_acc_iterative": 1.0,
+          "board_acc_checked": 1.0
+        },
+        "puzzles2_17_clue": {
+          "n": 4855,
+          "board_acc_one_shot": 0.0639,
+          "board_acc_iterative": 0.953,
+          "board_acc_checked": 0.9535
+        },
+        "01_file1": {
+          "n": 93552,
+          "board_acc_one_shot": 0.545,
+          "board_acc_iterative": 0.3254,
+          "board_acc_checked": 0.6529
+        },
+        "puzzles5_forum_hardest_1905_11+": {
+          "n": 4887,
+          "board_acc_one_shot": 0.0012,
+          "board_acc_iterative": 0.1567,
+          "board_acc_checked": 0.158
+        },
+        "puzzles3_magictour_top1465": {
+          "n": 143,
+          "board_acc_one_shot": 0.007,
+          "board_acc_iterative": 0.5315,
+          "board_acc_checked": 0.5315
+        },
+        "puzzles6_forum_hardest_1106": {
+          "n": 45,
+          "board_acc_one_shot": 0.0,
+          "board_acc_iterative": 0.0667,
+          "board_acc_checked": 0.0667
+        }
+      }
+    },
+    {
+      "checkpoint": "sudoku_constraint_ft.pt",
+      "params": 3418633,
+      "train_step": 10000,
+      "cell_acc": 0.7412,
+      "board_acc_one_shot": 0.235,
+      "board_acc_iterative": 0.4987,
+      "board_acc_checked": 0.5445,
+      "eval_seconds": 2665.9,
+      "by_source": {
+        "puzzles1_unbiased": {
+          "n": 99749,
+          "board_acc_one_shot": 0.3403,
+          "board_acc_iterative": 0.8923,
+          "board_acc_checked": 0.8929
+        },
+        "puzzles4_forum_hardest_1905": {
+          "n": 209601,
+          "board_acc_one_shot": 0.0046,
+          "board_acc_iterative": 0.2704,
+          "board_acc_checked": 0.2718
+        },
+        "puzzles0_kaggle": {
+          "n": 9954,
+          "board_acc_one_shot": 1.0,
+          "board_acc_iterative": 1.0,
+          "board_acc_checked": 1.0
+        },
+        "puzzles2_17_clue": {
+          "n": 4855,
+          "board_acc_one_shot": 0.0766,
+          "board_acc_iterative": 0.9617,
+          "board_acc_checked": 0.9617
+        },
+        "01_file1": {
+          "n": 93552,
+          "board_acc_one_shot": 0.5786,
+          "board_acc_iterative": 0.5276,
+          "board_acc_checked": 0.7307
+        },
+        "puzzles5_forum_hardest_1905_11+": {
+          "n": 4887,
+          "board_acc_one_shot": 0.0016,
+          "board_acc_iterative": 0.2214,
+          "board_acc_checked": 0.2218
+        },
+        "puzzles3_magictour_top1465": {
+          "n": 143,
+          "board_acc_one_shot": 0.021,
+          "board_acc_iterative": 0.5455,
+          "board_acc_checked": 0.5455
+        },
+        "puzzles6_forum_hardest_1106": {
+          "n": 45,
+          "board_acc_one_shot": 0.0,
+          "board_acc_iterative": 0.2444,
+          "board_acc_checked": 0.2444
+        }
+      }
+    }
+  ],
+  "backtracking": {
+    "puzzles1_unbiased": {
+      "n": 100,
+      "solved_within_limit": 0.96,
+      "timeouts": 4,
+      "time_limit_s": 5.0,
+      "median_ms": 359.3
+    },
+    "puzzles4_forum_hardest_1905": {
+      "n": 100,
+      "solved_within_limit": 0.51,
+      "timeouts": 49,
+      "time_limit_s": 5.0,
+      "median_ms": 4681.76
+    },
+    "puzzles0_kaggle": {
+      "n": 100,
+      "solved_within_limit": 1.0,
+      "timeouts": 0,
+      "time_limit_s": 5.0,
+      "median_ms": 2.29
+    },
+    "puzzles2_17_clue": {
+      "n": 100,
+      "solved_within_limit": 0.07,
+      "timeouts": 93,
+      "time_limit_s": 5.0,
+      "median_ms": 5000.03
+    },
+    "01_file1": {
+      "n": 100,
+      "solved_within_limit": 0.68,
+      "timeouts": 32,
+      "time_limit_s": 5.0,
+      "median_ms": 2460.17
+    },
+    "puzzles5_forum_hardest_1905_11+": {
+      "n": 100,
+      "solved_within_limit": 0.39,
+      "timeouts": 61,
+      "time_limit_s": 5.0,
+      "median_ms": 5000.03
+    },
+    "puzzles3_magictour_top1465": {
+      "n": 100,
+      "solved_within_limit": 0.59,
+      "timeouts": 41,
+      "time_limit_s": 5.0,
+      "median_ms": 3168.86
+    },
+    "puzzles6_forum_hardest_1106": {
+      "n": 45,
+      "solved_within_limit": 0.2222222222222222,
+      "timeouts": 35,
+      "time_limit_s": 5.0,
+      "median_ms": 5000.04
+    }
+  }
+}
