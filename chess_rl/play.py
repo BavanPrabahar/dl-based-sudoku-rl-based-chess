@@ -61,7 +61,7 @@ def agent_move(model, board, dev):
 
 def main():
     ap = argparse.ArgumentParser(description="Play chess against the RL agent")
-    ap.add_argument("--checkpoint", default="checkpoints/chess_rl.pt")
+    ap.add_argument("--checkpoint", default="checkpoints/chess_rl_games.pt")
     ap.add_argument("--black", action="store_true", help="you play Black")
     ap.add_argument("--fen", default=chess.STARTING_FEN)
     ap.add_argument("--selfplay", action="store_true", help="the agent plays both sides")
