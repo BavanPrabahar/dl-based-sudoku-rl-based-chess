@@ -7,7 +7,8 @@ Puzzle metrics (greedy policy, no search):
   solve_rate      the whole solution line is played correctly ("puzzle accuracy" on Lichess)
   by rating bucket, and an estimated puzzle rating: the player rating R that maximises the likelihood
   of the observed successes under the Elo model P(solve) = 1 / (1 + 10^((puzzle_rating - R) / 400)).
-Games: the greedy policy against a uniformly random mover (and optionally Stockfish, --stockfish PATH).
+Games: the greedy policy against a uniformly random mover, and optionally against Stockfish (--stockfish PATH)
+at each Skill Level in --skills, 10 ms per move. Colours alternate, a game is a draw after 300 plies.
 
 Example:
   python -m chess_rl.evaluate --models random checkpoints/chess_supervised.pt checkpoints/chess_rl.pt
@@ -96,7 +97,9 @@ def main():
     ap.add_argument("--puzzles", default="data/processed/lichess_puzzles.parquet")
     ap.add_argument("--max-puzzles", type=int, default=0, help="0 = the whole test split")
     ap.add_argument("--games", type=int, default=100)
-    ap.add_argument("--stockfish", default=None, help="path to a Stockfish binary for games at Skill Level 0")
+    ap.add_argument("--stockfish", default=None, help="path to a Stockfish binary for games against Stockfish")
+    ap.add_argument("--skills", type=int, nargs="+", default=[0], help="Stockfish Skill Levels to play against")
+    ap.add_argument("--engines", type=int, default=12, help="Stockfish processes (games are played in parallel)")
     ap.add_argument("--out", default="results/chess_results.json")
     args = ap.parse_args()
     dev = torch.device("cuda" if torch.cuda.is_available() else "cpu")
@@ -107,11 +110,10 @@ def main():
     if args.max_puzzles:
         test = test.sample(n=args.max_puzzles, random_state=0).reset_index(drop=True)
     out = {"test_puzzles": len(test), "puzzles": [], "games": []}
-    engine = None
+    pools = {}
     if args.stockfish:
-        import chess.engine
-        engine = chess.engine.SimpleEngine.popen_uci(args.stockfish)
-        engine.configure({"Skill Level": 0, "Threads": 1})
+        from chess_rl.train_games import StockfishPool
+        pools = {k: StockfishPool(args.stockfish, args.engines, k, 10.0) for k in args.skills}
     for spec in args.models:
         if spec == "random":
             res = evaluate_puzzles("random legal moves", None, test, dev, rng)
@@ -124,14 +126,16 @@ def main():
             g = evaluate_games(model, dev, lambda b: random_move(b, rng), args.games, "random mover")
             g["model"] = name
             out["games"].append(g)
-            if engine is not None:
-                sf = lambda b: engine.play(b, chess.engine.Limit(time=0.01)).move  # noqa: E731
-                g = evaluate_games(model, dev, sf, args.games, "Stockfish Skill Level 0, 10 ms/move")
-                g["model"] = name
-                out["games"].append(g)
+            for skill, pool in pools.items():
+                from chess_rl.train_games import play_games
+                s = play_games(model, pool, args.games, dev, greedy=True, max_plies=300)
+                out["games"].append({"opponent": f"Stockfish Skill Level {skill}, 10 ms/move", "games": args.games,
+                                     "wins": int((s == 1).sum()), "draws": int((s == 0.5).sum()),
+                                     "losses": int((s == 0).sum()), "score": float(s.mean()), "model": name})
+                print(json.dumps(out["games"][-1]), flush=True)
         print(json.dumps(out["puzzles"][-1]), flush=True)
-    if engine is not None:
-        engine.quit()
+    for pool in pools.values():
+        pool.close()
     os.makedirs(os.path.dirname(args.out) or ".", exist_ok=True)
     json.dump(out, open(args.out, "w"), indent=2)
     for g in out["games"]:
